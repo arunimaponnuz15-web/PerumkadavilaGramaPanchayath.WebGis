@@ -1,67 +1,704 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="./resources/ol.css">
-        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
-        <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
-        <link rel="stylesheet" href="./resources/qgis2web.css">
-        <style>
-        html, body {
-            background-color: #ffffff;
-        }
-        .ol-control > * {
-            background-color: #f8f8f8!important;
-            color: #444444!important;
-            border-radius: 0px;
-        }
-        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
-            color: #444444!important;
-        }
-        .search-layer-input-search {
-            background-color: #f8f8f8!important;
-        }
-        .ol-control > *:focus, .ol-control >*:hover {
-            background-color: rgba(248, 248, 248, 0.7)!important;
-        } 
-        .ol-control {
-            background-color: rgba(255,255,255,.4) !important;
-            padding: 2px !important;
-        } 
-        </style>
 
-        <style>
-        #map {
-            width: 1320px;
-            height: 587px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Explore information about Perumkadavila Grama Panchayat, public services, development, environment and geographical boundaries.">
+
+    <title>Perumkadavila Grama Panchayat</title>
+
+    <style>
+        /* General page design */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        </style>
-        <title></title>
-    </head>
-    <body>
-        <div id="map">
-            <div id="popup" class="ol-popup">
-                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-                <div id="popup-content"></div>
-            </div>
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 85px;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f5f2;
+            color: #29352e;
+            line-height: 1.7;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1250px;
+            margin: auto;
+            background: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #174d35, #28794d);
+            color: white;
+            text-align: center;
+            padding: 35px 20px 30px;
+        }
+
+        .government-logo {
+            display: block;
+            width: 95px;
+            height: 95px;
+            object-fit: contain;
+            background: white;
+            padding: 5px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+        }
+
+        header h1 {
+            font-size: 34px;
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #e0f1e5;
+            letter-spacing: 0.5px;
+        }
+
+        /* Navigation */
+        nav {
+            background: #103c29;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 12px 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: #36855a;
+        }
+
+        /* Sections */
+        section {
+            padding: 45px 6%;
+            border-bottom: 1px solid #e6eee8;
+            scroll-margin-top: 70px;
+        }
+
+        section h2 {
+            text-align: center;
+            color: #1b603e;
+            font-size: 27px;
+            margin-bottom: 25px;
+        }
+
+        section h2::after {
+            content: "";
+            display: block;
+            width: 65px;
+            height: 4px;
+            background: #d8a844;
+            border-radius: 5px;
+            margin: 10px auto 0;
+        }
+
+        section h3 {
+            color: #205d3d;
+            margin-bottom: 10px;
+            font-size: 19px;
+        }
+
+        .description {
+            max-width: 950px;
+            margin: 0 auto 20px;
+            text-align: justify;
+            color: #4b5850;
+        }
+
+        .description p {
+            margin-bottom: 15px;
+        }
+
+        /* Welcome section */
+        #welcome {
+            text-align: center;
+            background: #f8fbf8;
+        }
+
+        #welcome h2 {
+            font-size: 30px;
+        }
+
+        .panchayat-image {
+            display: block;
+            width: 75%;
+            max-width: 760px;
+            height: 350px;
+            object-fit: cover;
+            object-position: center;
+            margin: 25px auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.13);
+        }
+
+        #welcome .description {
+            text-align: center;
+            max-width: 850px;
+        }
+
+        /* About section */
+        #about {
+            background: #ffffff;
+        }
+
+        /* Public services */
+        #services {
+            background: #f6faf7;
+        }
+
+        .service-container,
+        .development-container {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 28px;
+        }
+
+        .service-card,
+        .development-card {
+            background: #ffffff;
+            padding: 25px;
+            border: 1px solid #e0e9e2;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(25, 75, 45, 0.06);
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .service-card:hover,
+        .development-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 7px 18px rgba(25, 75, 45, 0.12);
+        }
+
+        .service-card p,
+        .development-card p {
+            color: #566159;
+            margin-bottom: 15px;
+        }
+
+        .service-card a {
+            display: inline-block;
+            color: #17663e;
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 1px solid #17663e;
+            padding-bottom: 3px;
+        }
+
+        .service-card a:hover {
+            color: #b17b18;
+            border-color: #b17b18;
+        }
+
+        .note {
+            background: #fff7e6;
+            border-left: 4px solid #d8a844;
+            padding: 14px 18px;
+            margin-top: 25px;
+            border-radius: 4px;
+            color: #5d523c;
+            font-size: 14px;
+        }
+
+        /* Development section */
+        #development {
+            background: #ffffff;
+        }
+
+        .development-card {
+            border-top: 4px solid #36855a;
+        }
+
+        /* Location and boundary map */
+        #location {
+            background: #f6faf7;
+        }
+
+        .boundary-map {
+            display: block;
+            width: 85%;
+            max-width: 850px;
+            max-height: 600px;
+            height: auto;
+            object-fit: contain;
+            margin: 30px auto;
+            padding: 10px;
+            background: #ffffff;
+            border: 1px solid #dce7de;
+            border-radius: 10px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        #location .description {
+            text-align: center;
+        }
+
+        /* Contact */
+        #contact {
+            background: #ffffff;
+        }
+
+        .contact-box {
+            max-width: 750px;
+            margin: 0 auto;
+            background: #f5f9f5;
+            padding: 28px 32px;
+            border-radius: 10px;
+            border: 1px solid #dce8de;
+            border-left: 5px solid #28794d;
+        }
+
+        .contact-box p {
+            margin-bottom: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .contact-box strong {
+            color: #205d3d;
+        }
+
+        .contact-box a {
+            color: #17663e;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        /* Footer */
+        footer {
+            background: #103c29;
+            color: #e4eee7;
+            text-align: center;
+            padding: 25px 20px;
+            font-size: 13px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        /* Tablet and mobile screens */
+        @media (max-width: 700px) {
+            header {
+                padding: 28px 15px;
+            }
+
+            header h1 {
+                font-size: 26px;
+            }
+
+            .government-logo {
+                width: 75px;
+                height: 75px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            nav {
+                position: static;
+                gap: 3px;
+                padding: 10px;
+            }
+
+            nav a {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+            section {
+                padding: 32px 20px;
+            }
+
+            section h2 {
+                font-size: 23px;
+            }
+
+            #welcome h2 {
+                font-size: 25px;
+            }
+
+            .panchayat-image {
+                width: 100%;
+                height: 260px;
+            }
+
+            .boundary-map {
+                width: 100%;
+            }
+
+            .service-container,
+            .development-container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .service-card,
+            .development-card {
+                padding: 20px;
+            }
+
+            .contact-box {
+                padding: 22px 18px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            header h1 {
+                font-size: 23px;
+            }
+
+            nav a {
+                padding: 7px 8px;
+                font-size: 12px;
+            }
+
+            .panchayat-image {
+                height: 210px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- Header -->
+    <header id="home">
+        <img src="logo.png"
+             alt="Panchayat logo"
+             class="government-logo">
+
+        <h1>Perumkadavila Grama Panchayat</h1>
+
+        <p class="subtitle">
+            Local Governance | Public Services | Sustainable Development
+        </p>
+    </header>
+
+    <!-- Navigation -->
+    <nav aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#services">Services</a>
+        <a href="#development">Development</a>
+        <a href="#location">Location</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- Welcome -->
+    <section id="welcome">
+        <h2>Welcome to Perumkadavila Grama Panchayat</h2>
+
+        <img src="building.jpeg"
+             alt="Perumkadavila Panchayat office building"
+             class="panchayat-image">
+
+        <div class="description">
+            <p>
+                Welcome to the informational website of Perumkadavila
+                Grama Panchayat, Kerala. This website brings together
+                useful information about local governance, public
+                services, community development and environmental awareness.
+            </p>
+
+            <p>
+                Explore the sections to learn about the Panchayat,
+                access relevant government service portals and view
+                the geographical boundary map.
+            </p>
         </div>
-        <script src="resources/qgis2web_expressions.js"></script>
-<script src="resources/proj4.js"></script>
-        <script>proj4.defs('EPSG:32643','+proj=utm +zone=43 +datum=WGS84 +units=m +no_defs');</script>
-        <script src="./resources/functions.js"></script>
-        <script src="./resources/ol.js"></script>
-        <script src="./resources/ol-layerswitcher.js"></script>
-        <script src="resources/photon-geocoder-autocomplete.min.js"></script>
-        <script src="resources/olms.js"></script>
-        <script src="layers/SOILTYPES_0.js"></script><script src="layers/PANCHAYATHBOUNDARY_1.js"></script><script src="layers/GEOMORPHOLOGY_2.js"></script><script src="layers/GEOLOGY_3.js"></script><script src="layers/BUILDINGS_4.js"></script><script src="layers/ROADS_5.js"></script><script src="layers/DRAINAGE_6.js"></script>
-        <script src="styles/SOILTYPES_0_style.js"></script><script src="styles/PANCHAYATHBOUNDARY_1_style.js"></script><script src="styles/GEOMORPHOLOGY_2_style.js"></script><script src="styles/GEOLOGY_3_style.js"></script><script src="styles/BUILDINGS_4_style.js"></script><script src="styles/ROADS_5_style.js"></script><script src="styles/DRAINAGE_6_style.js"></script>
-        <script src="./layers/layers.js" type="text/javascript"></script> 
-        <script src="./resources/Autolinker.min.js"></script>
-        <script src="./resources/qgis2web.js"></script>
-    </body>
+    </section>
+
+    <!-- About Us -->
+    <section id="about">
+        <h2>About Our Panchayat</h2>
+
+        <div class="description">
+            <p>
+                Perumkadavila Grama Panchayat is a local self-government
+                institution in Kerala. Grama Panchayats play an important
+                role in addressing local needs, supporting community
+                development and facilitating essential civic services.
+            </p>
+
+            <p>
+                Local governance encourages public participation in
+                development planning and helps address community priorities.
+                Residents can contribute by staying informed, participating
+                in local activities and using the appropriate official
+                channels for public services.
+            </p>
+
+            <p>
+                This website is intended to make general Panchayat-related
+                information easier to access in one place.
+            </p>
+        </div>
+    </section>
+
+    <!-- Public Services -->
+    <section id="services">
+        <h2>Public Services</h2>
+
+        <div class="description">
+            <p>
+                The following links connect visitors to Kerala Government
+                and Local Self Government Department portals. Check the
+                relevant official website for current service availability
+                and application requirements.
+            </p>
+        </div>
+
+        <div class="service-container">
+
+            <div class="service-card">
+                <h3>Citizen Services</h3>
+                <p>
+                    Explore online citizen services provided through
+                    the Kerala Local Self Government Department.
+                </p>
+                <a href="https://citizen.lsgkerala.gov.in/"
+                   target="_blank" rel="noopener noreferrer">
+                    Visit Citizen Portal →
+                </a>
+            </div>
+
+            <div class="service-card">
+                <h3>Property Tax</h3>
+                <p>
+                    Find available property-tax information and online
+                    facilities through the relevant government portal.
+                </p>
+                <a href="https://tax.lsgkerala.gov.in/"
+                   target="_blank" rel="noopener noreferrer">
+                    Visit Tax Portal →
+                </a>
+            </div>
+
+            <div class="service-card">
+                <h3>Local Self Government</h3>
+                <p>
+                    Find information published by Kerala's Local Self
+                    Government Department.
+                </p>
+                <a href="https://lsgkerala.gov.in/"
+                   target="_blank" rel="noopener noreferrer">
+                    Visit LSGD Website →
+                </a>
+            </div>
+
+            <div class="service-card">
+                <h3>Kerala Government</h3>
+                <p>
+                    Access the Kerala Government's official portal for
+                    government information and updates.
+                </p>
+                <a href="https://kerala.gov.in/"
+                   target="_blank" rel="noopener noreferrer">
+                    Visit Government Website →
+                </a>
+            </div>
+
+        </div>
+
+        
+        </div>
+    </section>
+
+    <!-- Development and Environment -->
+    <section id="development">
+        <h2>Development and Environment</h2>
+
+        <div class="description">
+            <p>
+                Sustainable Panchayat development involves improving
+                infrastructure, supporting community well-being and
+                protecting natural resources. Public participation is
+                important in identifying local needs and priorities.
+            </p>
+        </div>
+
+        <div class="development-container">
+
+            <div class="development-card">
+                <h3>Infrastructure</h3>
+                <p>
+                    Roads, drainage and public facilities support
+                    accessibility, safety and everyday community needs.
+                </p>
+            </div>
+
+            <div class="development-card">
+                <h3>Waste Management</h3>
+                <p>
+                    Waste segregation, recycling and responsible disposal
+                    help reduce pollution and maintain clean neighbourhoods.
+                </p>
+            </div>
+
+            <div class="development-card">
+                <h3>Water and Drainage</h3>
+                <p>
+                    Protecting water resources and keeping drainage
+                    channels clear can support a healthier environment
+                    and help reduce local flood risks.
+                </p>
+            </div>
+
+            <div class="development-card">
+                <h3>Community Participation</h3>
+                <p>
+                    Residents can support local development through
+                    public meetings, community programmes and
+                    environmental awareness activities.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Location and Boundary Map -->
+    <section id="location">
+        <h2>Location and Boundary Map</h2>
+
+        <div class="description">
+            <p>
+                The map below provides a visual reference for the
+                geographical boundary of Perumkadavila Grama Panchayat.
+                It can help visitors understand the Panchayat's
+                administrative area.
+            </p>
+        </div>
+
+        <img src="boundary.png"
+             alt="Boundary map of Perumkadavila Grama Panchayat"
+             class="boundary-map">
+
+      
+            
+    </section>
+
+<!-- Resource Map -->
+<section id="resource-map">
+    <h2>Perumkadavila Resource Map</h2>
+
+    <div class="description">
+        <p>
+            Explore the interactive WebGIS resource map of Perumkadavila
+            Grama Panchayat. The map provides a geographical view of
+            local features and resources.
+        </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 25px;">
+        <a href="https://arunimaponnuz15-web.github.io/WEBGIS/"
+           target="_blank"
+           rel="noopener noreferrer"
+           style="
+               display: inline-block;
+               background: #17663e;
+               color: white;
+               padding: 14px 28px;
+               text-decoration: none;
+               font-weight: bold;
+               border-radius: 7px;
+               box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+           ">
+            Explore Interactive Resource Map →
+        </a>
+
+        <p style="margin-top: 15px; color: #566159;">
+            Click the button to open the interactive map in a new tab.
+        </p>
+    </div>
+</section>
+
+
+
+    <!-- Contact Information -->
+    <section id="contact">
+        <h2>Contact Information</h2>
+
+        <div class="contact-box">
+            <p>
+                <strong>Office:</strong>
+                Perumkadavila Grama Panchayat
+            </p>
+
+            <p>
+                <strong>Address:</strong>
+                Perumkadavila Grama Panchayat Office, Perumkadavila P.O., Neyyattinkara, Thiruvananthapuram, Kerala, India - PIN 695124
+            </p>
+
+            <p>
+                <strong>Official Phone:</strong>
+                9496040630
+            </p>
+
+            <p>
+                <strong>Official Email:</strong>
+              nregapkvila@gmail.com
+            </p>
+
+            <p>
+                For official information, visit the
+                <a href="https://lsgkerala.gov.in/"
+                   target="_blank" rel="noopener noreferrer">
+                    Kerala Local Self Government Department website
+                </a>.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            &copy; <span id="current-year">2026</span>
+            Perumkadavila Grama Panchayat Website
+        </p>
+
+        <p>
+            Informational website prototype. This is not an official
+            government website .
+        </p>
+    </footer>
+
+
+<script>
+    document.getElementById("current-year").textContent =
+        new Date().getFullYear();
+</script>
+
+</body>
 </html>
